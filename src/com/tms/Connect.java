@@ -1,17 +1,35 @@
 package com.tms;
 
-import com.mongodb.MongoClientException;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.connection.Connection;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-public class Connect {
-	private static Connection connection;
+public class DBConnect {
 
-	public static void connect() throws MongoClientException
-	{
-		MongoClient mongoClient = MongoClients.create("mongodb://host1:27017/teachers");
-	}
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/iws";
+    private static Connection connection;
+    private static Statement statement;
 
+    public static void connect() throws SQLException {
+        connection = DriverManager.getConnection(DB_URL, "root", "");
+        statement = connection.createStatement();
+    }
 
+    public static Statement getStatement() {
+        return statement;
+    }
+
+    public static void close() throws SQLException {
+
+//        String query = "SELECT * FROM users";
+//        ResultSet rs = statement.executeQuery(query);
+//        while(rs.next()){
+//            System.out.println(rs.getString("username"));
+//        }
+//        rs.close();
+
+        statement.close();
+        connection.close();
+    }
 }
